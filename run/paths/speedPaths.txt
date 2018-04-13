@@ -1,0 +1,4 @@
+1	data/speed_data/1000wordPP.txt
+2	data/speed_data/2000wordPP.txt
+3	data/speed_data/5000wordPP.txt
+4	data/speed_data/10000wordPP.txt
