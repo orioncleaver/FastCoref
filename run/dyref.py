@@ -10,7 +10,7 @@ import time
 import readers
 
 LOOKBACK_LENGTH = 100
-TRAINING_NUM = 600
+TRAINING_RATIO = 0.8
 
 class CorefModel:
     def __init__(self): 
@@ -48,11 +48,11 @@ class CorefModel:
             self.books = readers.read_normal_books(args.books)
             # only handles one book for now
             key = list(self.books.keys())[0]
-            self.training_data, self.testing_data = readers.read_lined_data(args.data_file, .8, args.books, key)
+            self.training_data, self.testing_data = readers.read_lined_data(args.data_file, TRAINING_RATIO, args.books, key)
 
         if format_ == 'x':
             self.books = readers.read_x_books(args.books)
-            self.training_data, self.testing_data = readers.read_data(args.data_file, .8)
+            self.training_data, self.testing_data = readers.read_data(args.data_file, TRAINING_RATIO)
         
         #sif format_ == 'o':
             
@@ -65,7 +65,6 @@ class CorefModel:
 
         features.append(book[anaphor - 1][0])
         features.append(book[anaphor][0])
-        features.append(book[anaphor + 1][0])
         
         features.append("dist_" + str(anaphor - antecedent))
         features.append("pronouns_" + str(book[anaphor][1] - book[antecedent][1]))
@@ -329,27 +328,36 @@ class NeuralNet (CorefModel):
         random.shuffle(self.training_data)
         for datum in self.training_data:
             book = self.books[datum[0]]
+
             scores = self.get_scores(book, datum[1], True)
             
             correct_index = self.get_correct_index(datum[1], datum[2])
+
             guess_index = np.argmax(dy.softmax(scores).npvalue())
             if correct_index == guess_index:
                 correct_num += 1
-                if v and correct_index != LOOKBACK_LENGTH and correct_index != 0:
-                    print("MATCH! Correct index: " + str(correct_index))
-                elif v and correct_index == LOOKBACK_LENGTH:
-                    print("MATCH! Correctly guessed out-of-range")
-                elif v and correct_index == 0:
-                    print("MATCH! Correctly guessed self-link")
+                if v:
+                    if correct_index == 0:
+                        print("MATCH! Correctly guessed out-of-range")
+                    elif correct_index == 1:
+                        print("MATCH! Correctly guessed self-link")
+                    else:
+                        print("MATCH! Correct index: " + str(correct_index))
+                        #print("  Guessed Word: ", book[datum[1] - guess_index])
+                        #print("  Correct Word: ", book[datum[1] - correct_index])
             elif v:
                 if correct_index == 0:
                     print("WRONG! Failed to guess out-of-range")
+                    print("WRONG! Correct dex: " + str(correct_index))
                 elif guess_index == 0:
                     print("WRONG! Incorrectly guessed out-of-range")
+                    print("WRONG! Correct dex: " + str(correct_index))
                 elif correct_index == 1:
                     print("WRONG! Failed to guess self-link")
+                    print("WRONG! Correct dex: " + str(correct_index))
                 elif guess_index == 1:
                     print("WRONG! Incorrectly guessed self-link")
+                    print("WRONG! Correct dex: " + str(correct_index))
                 else:
                     print("WRONG! Guess index: " + str(guess_index))
                     print("WRONG! Correct dex: " + str(correct_index))
@@ -405,7 +413,7 @@ def main(args):
         lm.read_books(format_, args)
 
         print("Training in Progress")
-        for ITER in range(20):
+        for ITER in range(10):
             print("  iteration " + str(ITER) + ":")
             lm.train(args.v)
         
@@ -424,7 +432,7 @@ def main(args):
         nn.init_after_read()
 
         print("Training in Progress")
-        for ITER in range(20):
+        for ITER in range(10):
             print("  iteration " + str(ITER) + ":")
             nn.train(args.v)
         

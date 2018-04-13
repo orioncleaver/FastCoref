@@ -109,8 +109,8 @@ def create_lined_index(file):
     for i, line in enumerate(open(file, "r")):
         temp_line = []
 
-        for word in line.split():
-            if not word == "": 
+        if not line == "":
+            for word in line.split(): 
                 temp_line.append(index)
                 index += 1
 
