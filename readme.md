@@ -2,8 +2,7 @@
 
 Fast-Coref is an effecient coreference resolution system implemented in Python using a simple linear model and DyNet for a neural model.  
 
-###### About
-
+##### About
 Development of this project, mentored by Jonathan Kummerfeld, occured during the 2017-2018 school year under the Undergraduate Research Oportunity Program at the University of Michigan. 
 
 ## Abstract 
@@ -14,41 +13,41 @@ Coreference resolution is a well-studied problem in computational linguistics. T
 
 #### Command line argments 
 
-' --v           ' is verbose output  
-' --linear    ' runs just the linear model (default is to run the neural model)  
-'--all          ' runs both models (default is to run the neural model)  
-'--cluster   ' runs neural model with some additional clustered features (sacrifice speed for accuracy in current implementation)  
-'--s/--x/--o (required)' takes one argument, the file of annotatted data   
-'--books     (required)' takes one argument, the file containing the paths to the book(s) that training/testing will occur on  
-'--run          (optional)' takes one argument, a book that will be entirely parsed for coreference information after the training/testing  
+` --v      ` is verbose output  
+` --linear ` runs just the linear model (default is to run the neural model)  
+`--all     ` runs both models (default is to run the neural model)  
+`--cluster ` runs neural model with some additional clustered features (sacrifice speed for accuracy in current implementation)  
+`--s/--x/--o (required)` takes one argument, the file of annotatted data   
+`--books     (required)` takes one argument, the file containing the paths to the book(s) that training/testing will occur on  
+`--run       (optional)` takes one argument, a book that will be entirely parsed for coreference information after the training/testing  
 
 #### Common usage on the command line: 
 
-'example$ python dyref.py --v --all --cluster --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt'
+`example$ python dyref.py --v --all --cluster --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt`
   
-'example$ python dyref.py --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt'
+`example$ python dyref.py --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt`
 
 #### Format of files
 
-All books can be in any text format, but some modification to readers.py may be required to get all types of books read in. (This includes the book file which is given to the optional ' --run ' argument) and used for running trained model 
+All books can be in any text format, but some modification to readers.py may be required to get all types of books read in. (This includes the book file which is given to the optional ` --run ` argument) and used for running trained model 
 
-##### Book path file (given to the required ' --books 'argument)
+##### Book path file (given to the required ` --books ` argument)
 > book_id [tab] /path/of/file
 
-##### example
-> alice &nbsp;&nbsp;&nbsp;&nbsp; data/slate_data/alicesadventures.txt
-> pride  &nbsp;&nbsp;&nbsp;&nbsp; data/slate_data/prideandprejudice.txt
+##### Example
+> alice &nbsp;&nbsp;&nbsp;&nbsp; data/slate_data/alicesadventures.txt  
+> pride  &nbsp;&nbsp;&nbsp;&nbsp; data/slate_data/prideandprejudice.txt  
 > worlds &nbsp;&nbsp;&nbsp;&nbsp; data/slate_data/waroftheworlds.txt
 
 ##### Annotated data file, for training and testing
-Data format given to the ' --s ' argument:
+Data format given to the ` --s ` argument:
 > (line_of_anaphor, col_of_anaphor) - (line_of_mention, col_of_mention)
 
-Data format given to the ' --x ' argument:
+Data format given to the ` --x ` argument:
 > book_id [tab] anaphor_index [tab] mention_index
 
-Data format given to the ' --o ' argument:
-* Onto Notes utilizes in-text annotation *
+Data format given to the ` --o ` argument:
+Onto Notes utilizes in-text annotation
 
 ## Results
 
