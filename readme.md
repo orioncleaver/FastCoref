@@ -8,62 +8,54 @@ Coreference resolution is a well-studied problem in computational linguistics. T
 
 ## Instructions 
 
-Command line argments 
+#### Command line argments 
 
---v         is verbose output
---linear    runs just the linear model (default is to run the neural model)
---all       runs both models (default is to run the neural model)
---cluster   runs neural model with some additional clustered features (sacrifice speed for accuracy in current implementation)
+--v         is verbose output  
+--linear    runs just the linear model (default is to run the neural model)  
+--all       runs both models (default is to run the neural model)  
+--cluster   runs neural model with some additional clustered features (sacrifice speed for accuracy in current implementation)  
+--s/--x/--o takes one argument, the file of annotatted data (CHOOSE ONE)         
+--books     takes one argument, the file containing the paths to the book(s) that training/testing will occur on  
+--run       takes one argument, a book that will be entirely parsed for coreference information after the training/testing  
 
---s
---x         take one argument, the file of annotatted data         
---o         
- 
+#### Common usage on the command line: 
 
---books     takes one argument, the file containing the paths to the book(s) that training/testing will occur on
---run       takes one argument, a book that will be entirely parsed for coreference information after the training/testing 
-
-
-
-Common usage on the command line: 
-
-example$ python dyref.py --v --all --cluster --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt
-
+example$ python dyref.py --v --all --cluster --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt  
+  
 example$ python dyref.py --s data/slate_data/alicesadventures.txt.annotation --books paths/alicePath.txt
 
+#### Format of files
 
-Format of files
+All books can be in any text format, but some modification to readers.py may be required to get all types of books read in. (This includes the book file which is given to the optional [--run] argument) and used for running trained model 
 
-All books can be in any text format, but some modification to readers.py may be required to get all types of books read in. This includes the book file which is given to the optional [--run] argument) and used for running trained model 
-
-Book path file, for training and testing (given to the required [--books] argument)
-Each new line consists of:
+##### Book path file (given to the required [--books] argument)
 book_id [tab] /path/of/file
 
-Annotated data file, for training and testing, depends on which data argument you select
-Data format given to the [--s] argument:
+##### Annotated data file, for training and testing
+###### Data format given to the [--s] argument:
 (line_of_anaphor, col_of_anaphor) - (line_of_mention, col_of_mention)
 
-Data format given to the [--x] argument:
+###### Data format given to the [--x] argument:
 book_id [tab] anaphor_index [tab] mention_index
 
-Data format given to the [--o] argument:
+###### Data format given to the [--o] argument:
 Onto Notes utilizes in-text annotation
 
 
 ## Results
 
 It is possible to use an AI design to efficiently parse entire novels for their coreference information.
-    - Both models are significantly faster than existing systems
-    - The neural model is consistently about 4x slower than the linear model
-    - Both models have linear experimental time complexity. This means the time it takes to process a text of length n will increase linearly as n increases
 
-![alt text](symposium_poster.png)
++ Both models are significantly faster than existing systems
++ The neural model is consistently about 4x slower than the linear model
++ Both models have linear experimental time complexity. This means the time it takes to process a text of length n will increase linearly as n increases
 
-
-Conclusion
+#### Conclusion
 
 These results give strong promise about what is possible with automatic coreference resolution. Researchers and passionate people interested in trends, events, or characterizations across novels will be have the tool of coreference to assist in their search. Coreference can be used to help answer a wide array of linguistic, cultural, and semantic research questions. Any question that looks for cases when a particular entity does/says a certain thing will require some form of coreference in order to be viable on the scale of many long texts. With linear time complexity, there’s essentially no limit to how long a text can be.
+
+#### Poster 
+![alt text](symposium_poster.png)
 
 ## Notes and Sources on Data
 
@@ -76,8 +68,8 @@ These results give strong promise about what is possible with automatic corefere
 
 ## TODO
 
-    - Provide options for outputting the coreference information provided by process of running the model on an entire novel
-    - Incorporating minimal linguistic information to assist in the process of selecting what is and is not a possible mention of an entity (i.e. ignoring non-nouns)
-    - Automatic clustering of mentions by entity, to replace the currently relatively fragile “linking” method we currently use
-    - Allowing for optional pre-training, including novel specific weights (partially annotate a novel, or just provide information about known entities in the novel, and improve the accuracy significantly)
-    - Implemenent caching to minimize the recalculation of features
+- Provide options for outputting the coreference information provided by process of running the model on an entire novel
+- Incorporating minimal linguistic information to assist in the process of selecting what is and is not a possible mention of an entity (i.e. ignoring non-nouns)
+- Automatic clustering of mentions by entity, to replace the currently relatively fragile “linking” method we currently use
+- Allowing for optional pre-training, including novel specific weights (partially annotate a novel, or just provide information about known entities in the novel, and improve the accuracy significantly)
+- Implemenent caching to minimize the recalculation of features
